@@ -24,9 +24,7 @@ C# code should be written to maximize readability, maintainability, and correctn
 - Use meaningful names:
     ```csharp
     // Good: Clear intent
-    public async Task<Result<Order>> ProcessOrderAsync(
-            OrderRequest request,
-            CancellationToken cancellationToken)
+    public async Task<Result<Order>> ProcessOrderAsync(OrderRequest request, CancellationToken cancellationToken)
     
     // Avoid: Unclear abbreviations
     public async Task<Result<T>> ProcAsync<T>(ReqDto r, CancellationToken ct)

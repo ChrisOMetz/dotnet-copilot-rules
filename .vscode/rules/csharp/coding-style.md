@@ -103,10 +103,10 @@ globs: *.cs
         private string _lastError; // Warning: Could be null
     }
     ```
-- Use null checks appropriately:
+- Use null checks only when necessary for reference types and public methods:
     ```csharp
     // Good: Proper null checking
-    public void ProcessOrder(Order? order)
+    public void ProcessOrder(Order order)
     {
         ArgumentNullException.ThrowIfNull(order);
 
@@ -121,6 +121,17 @@ globs: *.cs
             { Lines: null } => throw new ArgumentException("Order lines cannot be null", nameof(order)),
             _ => order.Lines.Sum(l => l.Total)
         };
+    // Avoid: null checks for value types
+    public void ProcessOrder(int orderId)
+    {
+        ArgumentNullException.ThrowIfNull(orderId);
+    }
+
+    // Avoid: null checks for non-public methods
+    private void ProcessOrder(Order order)
+    {
+        ArgumentNullException.ThrowIfNull(order);
+    }
     ```
 - Use null-forgiving operator when appropriate:
     ```csharp
@@ -422,8 +433,6 @@ globs: *.cs
         
         public void ValidateOrder(Order order)
         {
-            ArgumentNullException.ThrowIfNull(order, nameof(order));
-            
             if (order.Lines.Count == 0)
                 throw new ArgumentException(
                     "Order must have at least one line",
@@ -458,6 +467,65 @@ globs: *.cs
                     order.Id);
                 throw;
             }
+        }
+    }
+    ```
+
+### Usings and Namespaces:
+
+- Use implicit usings:
+    ```csharp
+    // Good: Implicit
+    namespace MyNamespace
+    {
+        public class MyClass
+        {
+            // Implementation
+        }
+    }
+    // Avoid:
+    using System; // DON'T USE
+    using System.Collections.Generic; // DON'T USE
+    using System.IO; // DON'T USE
+    using System.Linq; // DON'T USE
+    using System.Net.Http; // DON'T USE
+    using System.Threading; // DON'T USE
+    using System.Threading.Tasks;// DON'T USE
+    using System.Net.Http.Json; // DON'T USE
+    using Microsoft.AspNetCore.Builder; // DON'T USE
+    using Microsoft.AspNetCore.Hosting; // DON'T USE
+    using Microsoft.AspNetCore.Http; // DON'T USE
+    using Microsoft.AspNetCore.Routing; // DON'T USE
+    using Microsoft.Extensions.Configuration; // DON'T USE
+    using Microsoft.Extensions.DependencyInjection; // DON'T USE
+    using Microsoft.Extensions.Hosting; // DON'T USE
+    using Microsoft.Extensions.Logging; // DON'T USE
+    using Good: Explicit usings; // DON'T USE
+    
+    namespace MyNamespace
+    {
+        public class MyClass
+        {
+            // Implementation
+        }
+    }
+    ```
+- Use file-scoped namespaces:
+    ```csharp
+    // Good: File-scoped namespace
+    namespace MyNamespace;
+    
+    public class MyClass
+    {
+        // Implementation
+    }
+    
+    // Avoid: Block-scoped namespace
+    namespace MyNamespace
+    {
+        public class MyClass
+        {
+            // Implementation
         }
     }
     ```
