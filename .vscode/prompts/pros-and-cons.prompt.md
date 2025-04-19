@@ -1,15 +1,40 @@
 ---
-description: Pros and Cons analysis of the provided solution
-globs: *.cs
+description: Pros and Cons Analysis
 ---
 
-# Role Definition:
+# Definition:
 
-- Code Reviewer
-- Problem Solver
-- Devil's Advocate
+Analyze the proposed solution, focusing on its strengths and weaknesses. Consider alternative approaches, and provide a clear summary of your evaluation.
 
-Your goal is to provide an analysis of the code provided, focusing on its strengths and weaknesses. You should also consider alternative approaches to the problem and provide a summary of your argument.
+## Constraints
 
-* Provide Pros and Cons in a bulleted list format.
-* Provide a summary of the argument in a single paragraph.
+- Ask follow up questions if needed to clarify the solution. 
+- If any questions, wait for the user to respond before proceeding with the analysis.
+- Provide Pros and Cons in a bulleted list format.
+- Highlight best practices and common pitfalls, where relevant.
+- Suggest alternative solutions or improvements, if applicable.
+- Provide pros and cons for alternative solutions if applicable. Provide at least 3 pros and cons for each alternative solution.
+- Use provided emojis below to enhance readability
+- use ✅ to highlight pros in the list
+- use ❌ to indicate cons in the list
+- use ✨ to highlight best practice items in the list
+- use ☝️ to indicate common pitfalls.
+- Use 🔒 to highlight for security (InfoSec) related topics
+- End with a single-paragraph summary of your overall assessment.
+
+## Structure
+
+- **Proposed Solution**: <NAME>
+- **Description**: <DESCRIPTION>
+- **Pros**:
+- **Cons**:
+- **Best Practices**:
+- **Common Pitfalls**:
+
+- **Alternative Solution**: <NAME>
+- **Description**: <DESCRIPTION>
+
+- **Pros**:
+- **Cons**:
+
+<!-- ... -->

@@ -19,7 +19,7 @@ globs: *.cs
     ```
 - Make classes sealed by default:
     ```csharp
-    // Good: Sealed by default
+    // Good: Make classes sealed by default
     public sealed class OrderProcessor
     {
         // Implementation
@@ -32,7 +32,17 @@ globs: *.cs
     }
     ```
 
-## Control Flow
+## Variable Declarations:
+
+- Use var where possible:
+    ```csharp
+    // Good: Using var for type inference
+    var fruit = "Apple";
+    var number = 42;
+    var order = new Order(fruit, number);
+    ```
+
+## Control Flow:
 
 - Prefer range indexers over LINQ:
     ```csharp
@@ -108,7 +118,7 @@ globs: *.cs
     // Good: Proper null checking
     public void ProcessOrder(Order order)
     {
-        ArgumentNullException.ThrowIfNull(order);
+        ArgumentNullException.ThrowIfNull(order); // Appropriate for reference types
 
         _logger?.LogInformation("Processing order {Id}", order.Id);
     }
@@ -121,16 +131,16 @@ globs: *.cs
             { Lines: null } => throw new ArgumentException("Order lines cannot be null", nameof(order)),
             _ => order.Lines.Sum(l => l.Total)
         };
-    // Avoid: null checks for value types
+    // BAD: Avoid null checks for value types
     public void ProcessOrder(int orderId)
     {
-        ArgumentNullException.ThrowIfNull(orderId);
+        ArgumentNullException.ThrowIfNull(order); // DON'T USE Null checks are unnecessary for value types
     }
 
     // Avoid: null checks for non-public methods
     private void ProcessOrder(Order order)
     {
-        ArgumentNullException.ThrowIfNull(order);
+        ArgumentNullException.ThrowIfNull(order); // DON'T USE, ProcessOrder is private
     }
     ```
 - Use null-forgiving operator when appropriate:
