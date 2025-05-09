@@ -1,5 +1,5 @@
 ---
-description: Q&A Session
+description: "Q&A Session"
 ---
 
 # Definition

@@ -1,6 +1,5 @@
 ---
-description: This file provides guidelines for writing clean, maintainable, and idiomatic C# code with a focus on functional patterns and proper abstraction.
-globs: *.cs
+description: "This file provides guidelines for writing clean, maintainable, and idiomatic C# code with a focus on functional patterns and proper abstraction."
 ---
 
 ## Type Definitions:

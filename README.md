@@ -5,6 +5,21 @@ A collection of [GitHub Copilot AI rules](https://code.visualstudio.com/docs/cop
 > [!TIP]
 > You can enhance Copilot's chat responses by providing it with contextual details about your team's workflow, tools, or project specifics.
 
+## Changelog:
+
+* New release <https://code.visualstudio.com/updates/v1_100> introduces a better way to provide context to Copilot. 
+  * Custom Instructions (user/workspace)
+  * Custom Prompts (user/workspace)
+
+### Tools 
+
+Here is my top content extraction tools for GitHub Copilot:
+
+* `#fetch` - fetch web page
+* `#githubRepo` - fetch remote GitHub repository
+* `#context7` - fetch docs
+* `#codebase` - work with the code base
+
 ## 📚 Available Rule Sets
 
 This set of rules is a good starting point and should be customized to fit your specific needs. You can add or remove rules as necessary.

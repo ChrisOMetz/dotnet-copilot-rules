@@ -1,6 +1,5 @@
 ---
-mode: 'agent'
-description: 'Create a proposal'
+description: "Create a proposal"
 ---
 
 I want to build an app. My idea was attached in the prompt I sent you.

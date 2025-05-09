@@ -1,5 +1,5 @@
 ---
-description: 
+description: "This file contains the instructions for the commit message format."
 ---
 
 ## Use Conentional Commits

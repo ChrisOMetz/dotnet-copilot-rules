@@ -1,6 +1,6 @@
 ---
-description: This file provides guidelines for writing effective, maintainable tests using xUnit and related tools.
-globs: *.cs, *.Tests.csproj
+description: "This file provides guidelines for writing effective, maintainable tests using xUnit and related tools"
+applyTo: "tests/**/*.cs"
 ---
 
 ## Role Definition:
