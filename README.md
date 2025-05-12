@@ -5,27 +5,11 @@ A collection of [GitHub Copilot AI rules](https://code.visualstudio.com/docs/cop
 > [!TIP]
 > You can enhance Copilot's chat responses by providing it with contextual details about your team's workflow, tools, or project specifics.
 
-## Changelog:
-
-* New release <https://code.visualstudio.com/updates/v1_100> introduces a better way to provide context to Copilot. 
-  * Custom Instructions (user/workspace)
-  * Custom Prompts (user/workspace)
-
-### Tools 
-
-Here is my top content extraction tools for GitHub Copilot:
-
-* `#fetch` - fetch web page
-* `#githubRepo` - fetch remote GitHub repository
-* `#context7` - fetch docs
-* `#codebase` - work with the code base
-
-## 📚 Available Rule Sets
+## 📚 Customizations: Instructions, Prompts, MCPs, etc.
 
 This set of rules is a good starting point and should be customized to fit your specific needs. You can add or remove rules as necessary.
 
-
-### 💻 [.NET Development](.vscode/rules/csharp/)
+### 💻 .NET Development
 
 Rules for writing clean, maintainable C# code:
 - ✨ Modern C# coding patterns
@@ -34,74 +18,102 @@ Rules for writing clean, maintainable C# code:
 - 🛡️ Error handling
 - 🔌 Dependency management
 
-* Code-generation instructions
-  * [csharp/coding-guidelines.md](.vscode/rules/csharp/coding-guidelines.md)
-  * [csharp/coding-style.md](.vscode/rules/csharp/coding-style.md)
-* Test-generation instructions
-  * [csharp/testing-xunit.md](.vscode/rules/csharp/testing-xunit.md)
+* Code-generation instructions - [csharp/coding-guidelines.md](.vscode/instructions/coding-guidelines.instructions.md), [csharp/coding-style.md](.vscode/instructions/coding-style.instructions.md)
+* Test-generation instructions -  [csharp/testing-xunit.md](.vscode/instructions/testing-xunit.instructions.md)
 
-### ⏳ [Git](.vscode/rules/git-message.md)
+### ⏳ [Git](.vscode/git-message.instructions.md)
 
-* Commit message generation instructions
-  * [git-message.md](.vscode/rules/git-message.md)
+* Commit message generation instructions - [git-message.md](.vscode/git-message.instructions.md)
 
-## 📝 Available Prompts
+### Tools
 
-Prompt files (prompts) let you build and share reusable prompt instructions with additional context.
+Here is my top content extraction tools for GitHub Copilot:
 
-- Pros and Cons Prompt - [prompts/pros-and-cons.prompt.md](.vscode/prompts/pros-and-cons.prompt.md)
-
-See more at [Custom instructions for GitHub Copilot in VS Code](https://code.visualstudio.com/docs/copilot/copilot-customization)
+* `#fetch` - fetch web page
+* `#githubRepo` - fetch remote GitHub repository
+* `#context7` - fetch docs
+* `#codebase` - work with the code base
 
 ## How to Use This Repository
 
-Copy the relevant rules you want to use into your project's `.vscode/rules` directory and configure `github.copilot.chat.codeGeneration.instructions`.
+Copy the relevant instructions you want to use into your project's `.vscode/instructions` directory and configure `github.copilot.chat.codeGeneration.instructions` if needed.
 
 Here is an example of how to set up your `.vscode/settings.json` file:
 
 ```json
 {
-    "github.copilot.chat.codeGeneration.instructions": [
-        {
-            "file": ".vscode/rules/csharp/coding-guidelines.md"
-        },
-        {
-            "file": ".vscode/rules/csharp/coding-style.md"
-        }
-    ],
-    "github.copilot.chat.reviewSelection.enabled": true,
-    "github.copilot.chat.testGeneration.instructions": [
-        {
-            "file": ".vscode/rules/csharp/testing-xunit.md"
-        }
-    ],
-    "chat.promptFiles": true,
-    "chat.promptFilesLocations": {
-        ".github/prompts": true,
-        ".vscode/prompts": true
+  "chat.promptFiles": true,
+  "chat.promptFilesLocations": {
+    ".vscode/prompts": true
+  },
+  "chat.instructionsFilesLocations": {
+    ".vscode/instructions": true
+  },
+  "github.copilot.chat.codeGeneration.instructions": [],
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "file": ".vscode/git-message.instructions.md"
     }
+  ],
+  "github.copilot.chat.reviewSelection.enabled": true,
+  "github.copilot.chat.reviewSelection.instructions": [
+    {
+      "file": ".vscode/instructions/coding-guidelines.instructions.md"
+    },
+    {
+      "file": ".vscode/instructions/coding-style.instructions.md"
+    }
+  ],
+  "github.copilot.chat.testGeneration.instructions": [
+    {
+      "file": ".vscode/instructions/testing-xunit.instructions.md"
+    }
+  ]
 }
 ```
 
 ## 🚀 Motivation
 
-### Treating AI like a teammate!
+### Productivity
 
-If you want to build a successful and maintainable project, ensuring your code is clean, maintainable, and idiomatic is crucial. This is where *coding guidelines* come into play.
+You can create reusable instructions and prompts for your team to handle common tasks and GenAI scenarios effectively.
 
-Coding guidelines promote consistency, readability, and maintainability within a project. Documenting these guidelines helps developers adhere to best practices, streamline collaboration, and minimize technical debt.
+### Coding with Agents in Mind
 
-As AI coding tools and agents become integral team members, clear coding guidelines are more important than ever. These tools assist in generating, refactoring, and reviewing code, but they rely on well-defined rules to align with project standards. Documenting coding guidelines provides essential context, ensuring AI-generated code maintains consistency, readability, and best practices. Without structured rules, AI contributions may introduce inconsistencies, increasing technical debt and maintenance overhead.
+Shift your mindset from being a code typist to an AI operator when appropriate. Start with an instruction prompt and gather as much context as possible. Once you clearly understand the task, determine the level of AI assistance needed.
+
+💡 To stay in the "Productivity Zone", gain experience with various AI models.
+
+### Treat AI as a Teammate
+
+Building a successful, maintainable project requires clean, idiomatic, and consistent code. This is where *coding guidelines* are essential. They:
+- Promote consistency, readability, and maintainability.
+- Streamline collaboration and reduce technical debt.
+- Provide context for AI tools, ensuring generated code aligns with project standards.
+
+Without clear guidelines, AI contributions may introduce inconsistencies, increasing maintenance overhead.
 
 ### Documentation
 
-Document your coding guidelines so it can be consumed by AI tools. Not only it can be used for additional context for code generation, but also now you can chat with LLMs about your coding guidelines. It becomes integral part of your project.
+Document your coding guidelines so it can be consumed by AI tools. Not only can it be used for additional context for code generation, but also now you can chat with LLMs about your coding guidelines. It becomes integral part of your project.
 
-💡 For example, you can ask Copilot for a review of your code and it will be able to refer to the coding guidelines you provided.
+💡 For example, you can ask Copilot to review your code, and it will refer to the guidelines you provided.
 
 ### Agent Mode
 
-With an introduction of [Agent Mode](https://code.visualstudio.com/blogs/2025/02/24/introducing-copilot-agent-mode) it is even more important to have clear guidelines otherwise how you expect consistency and independence from AI agents?
+With the introduction of [Agent Mode](https://code.visualstudio.com/blogs/2025/02/24/introducing-copilot-agent-mode), clear guidelines are crucial. They ensure consistency and independence in AI-generated contributions.
+
+## Changelog:
+
+* New release <https://code.visualstudio.com/updates/v1_100> introduces a better way to provide context to Copilot. 
+  * Custom Instructions (user/workspace)
+  * Custom Prompts (user/workspace)
+
+## Blogs
+
+* https://nikiforovall.blog/productivity/2025/03/08/github-copilot-instructions-for-dotnet.html
+* https://nikiforovall.blog/productivity/2025/04/19/github-copilot-prompt-engineering.html
+* https://nikiforovall.blog/productivity/2025/05/03/github-copilot-prompt-engineering-code-review.html
 
 ## 💳 Credits
 
