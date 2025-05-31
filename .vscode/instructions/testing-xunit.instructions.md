@@ -22,12 +22,10 @@ Tests should be reliable, maintainable, and provide meaningful coverage. Use xUn
 
 - Use ITestOutputHelper for logging:
     ```csharp
-    public class OrderProcessingTests(ITestOutputHelper output)
-    {
-        
+    public class OrderProcessingTests(ITestOutputHelper output) {
+
         [Fact]
-        public async Task ProcessOrder_ValidOrder_Succeeds()
-        {
+        public async Task ProcessOrder_ValidOrder_Succeeds() {
             output.WriteLine("Starting test with valid order");
             // Test implementation
         }
@@ -35,29 +33,25 @@ Tests should be reliable, maintainable, and provide meaningful coverage. Use xUn
     ```
 - Use fixtures for shared state:
     ```csharp
-    public class DatabaseFixture : IAsyncLifetime
-    {
+    public class DatabaseFixture : IAsyncLifetime {
         public DbConnection Connection { get; private set; }
-        
-        public async Task InitializeAsync()
-        {
+
+        public async Task InitializeAsync() {
             Connection = new SqlConnection("connection-string");
             await Connection.OpenAsync();
         }
-        
-        public async Task DisposeAsync()
-        {
+
+        public async Task DisposeAsync() {
             await Connection.DisposeAsync();
         }
     }
-    
+
     public class OrderTests : IClassFixture<DatabaseFixture>
     {
         private readonly DatabaseFixture _fixture;
         private readonly ITestOutputHelper _output;
-        
-        public OrderTests(DatabaseFixture fixture, ITestOutputHelper output)
-        {
+
+        public OrderTests(DatabaseFixture fixture, ITestOutputHelper output) {
             _fixture = fixture;
             _output = output;
         }
@@ -68,16 +62,14 @@ Tests should be reliable, maintainable, and provide meaningful coverage. Use xUn
 
 - Prefer Theory over multiple Facts:
     ```csharp
-    public class DiscountCalculatorTests
-    {
-        public static TheoryData<decimal, int, decimal> DiscountTestData => 
-            new()
-            {
+    public class DiscountCalculatorTests {
+        public static TheoryData<decimal, int, decimal> DiscountTestData =>
+            new() {
                 { 100m, 1, 0m },      // No discount for single item
                 { 100m, 5, 5m },      // 5% for 5 items
                 { 100m, 10, 10m },    // 10% for 10 items
             };
-        
+
         [Theory]
         [MemberData(nameof(DiscountTestData))]
         public void CalculateDiscount_ReturnsCorrectAmount(
@@ -87,10 +79,10 @@ Tests should be reliable, maintainable, and provide meaningful coverage. Use xUn
         {
             // Arrange
             var calculator = new DiscountCalculator();
-            
+
             // Act
             var discount = calculator.Calculate(price, quantity);
-            
+
             // Assert
             Assert.Equal(expectedDiscount, discount);
         }
@@ -99,17 +91,16 @@ Tests should be reliable, maintainable, and provide meaningful coverage. Use xUn
 - Follow Arrange-Act-Assert pattern:
     ```csharp
     [Fact]
-    public async Task ProcessOrder_ValidOrder_UpdatesInventory()
-    {
+    public async Task ProcessOrder_ValidOrder_UpdatesInventory() {
         // Arrange
         var order = new Order(
             OrderId.New(),
             new[] { new OrderLine("SKU123", 5) });
         var processor = new OrderProcessor(_mockRepository.Object);
-        
+
         // Act
         var result = await processor.ProcessAsync(order);
-        
+
         // Assert
         Assert.True(result.IsSuccess);
         _mockRepository.Verify(
@@ -124,14 +115,12 @@ Tests should be reliable, maintainable, and provide meaningful coverage. Use xUn
 
 - Use fresh data for each test:
     ```csharp
-    public class OrderTests
-    {
+    public class OrderTests {
         private static Order CreateTestOrder() =>
             new(OrderId.New(), TestData.CreateOrderLines());
-            
+
         [Fact]
-        public async Task ProcessOrder_Success()
-        {
+        public async Task ProcessOrder_Success() {
             var order = CreateTestOrder();
             // Test implementation
         }
@@ -139,19 +128,16 @@ Tests should be reliable, maintainable, and provide meaningful coverage. Use xUn
     ```
 - Clean up resources:
     ```csharp
-    public class IntegrationTests : IAsyncDisposable
-    {
+    public class IntegrationTests : IAsyncDisposable {
         private readonly TestServer _server;
         private readonly HttpClient _client;
-        
-        public IntegrationTests()
-        {
+
+        public IntegrationTests() {
             _server = new TestServer(CreateHostBuilder());
             _client = _server.CreateClient();
         }
-        
-        public async ValueTask DisposeAsync()
-        {
+
+        public async ValueTask DisposeAsync() {
             _client.Dispose();
             await _server.DisposeAsync();
         }
@@ -165,7 +151,7 @@ Tests should be reliable, maintainable, and provide meaningful coverage. Use xUn
     // Good: Clear test names
     [Fact]
     public async Task ProcessOrder_WhenInventoryAvailable_UpdatesStockAndReturnsSuccess()
-    
+
     // Avoid: Unclear names
     [Fact]
     public async Task TestProcessOrder()
@@ -176,7 +162,7 @@ Tests should be reliable, maintainable, and provide meaningful coverage. Use xUn
     Assert.Equal(expected, actual);
     Assert.Contains(expectedItem, collection);
     Assert.Throws<OrderException>(() => processor.Process(invalidOrder));
-    
+
     // Avoid: Multiple assertions without context
     Assert.NotNull(result);
     Assert.True(result.Success);
@@ -186,17 +172,15 @@ Tests should be reliable, maintainable, and provide meaningful coverage. Use xUn
     ```csharp
     // Good: Async test method
     [Fact]
-    public async Task ProcessOrder_ValidOrder_Succeeds()
-    {
+    public async Task ProcessOrder_ValidOrder_Succeeds() {
         await using var processor = new OrderProcessor();
         var result = await processor.ProcessAsync(order);
         Assert.True(result.IsSuccess);
     }
-    
+
     // Avoid: Sync over async
     [Fact]
-    public void ProcessOrder_ValidOrder_Succeeds()
-    {
+    public void ProcessOrder_ValidOrder_Succeeds() {
         using var processor = new OrderProcessor();
         var result = processor.ProcessAsync(order).Result;  // Can deadlock
         Assert.True(result.IsSuccess);
@@ -206,16 +190,14 @@ Tests should be reliable, maintainable, and provide meaningful coverage. Use xUn
     ```csharp
     // Good:
     [Fact]
-    public async Task ProcessOrder_CancellationRequested()
-    {
+    public async Task ProcessOrder_CancellationRequested() {
         await using var processor = new OrderProcessor();
         var result = await processor.ProcessAsync(order, TestContext.Current.CancellationToken);
         Assert.True(result.IsSuccess);
     }
     // Avoid:
     [Fact]
-    public async Task ProcessOrder_CancellationRequested()
-    {
+    public async Task ProcessOrder_CancellationRequested() {
         await using var processor = new OrderProcessor();
         var result = await processor.ProcessAsync(order, CancellationToken.None);
         Assert.False(result.IsSuccess);
@@ -227,49 +209,44 @@ Tests should be reliable, maintainable, and provide meaningful coverage. Use xUn
 - Use xUnit's built-in assertions:
     ```csharp
     // Good: Using xUnit's built-in assertions
-    public class OrderTests
-    {
+    public class OrderTests {
         [Fact]
-        public void CalculateTotal_WithValidLines_ReturnsCorrectSum()
-        {
+        public void CalculateTotal_WithValidLines_ReturnsCorrectSum() {
             // Arrange
             var order = new Order(
                 OrderId.New(),
-                new[]
-                {
+                new[] {
                     new OrderLine("SKU1", 2, 10.0m),
                     new OrderLine("SKU2", 1, 20.0m)
                 });
-            
+
             // Act
             var total = order.CalculateTotal();
-            
+
             // Assert
             Assert.Equal(40.0m, total);
         }
-        
+
         [Fact]
-        public void Order_WithInvalidLines_ThrowsException()
-        {
+        public void Order_WithInvalidLines_ThrowsException() {
             // Arrange
             var invalidLines = new OrderLine[] { };
-            
+
             // Act & Assert
             var ex = Assert.Throws<ArgumentException>(() =>
                 new Order(OrderId.New(), invalidLines));
             Assert.Equal("Order must have at least one line", ex.Message);
         }
-        
+
         [Fact]
-        public void Order_WithValidData_HasExpectedProperties()
-        {
+        public void Order_WithValidData_HasExpectedProperties() {
             // Arrange
             var id = OrderId.New();
             var lines = new[] { new OrderLine("SKU1", 1, 10.0m) };
-            
+
             // Act
             var order = new Order(id, lines);
-            
+
             // Assert
             Assert.NotNull(order);
             Assert.Equal(id, order.Id);
@@ -284,12 +261,11 @@ Tests should be reliable, maintainable, and provide meaningful coverage. Use xUn
         }
     }
     ```
-    
+
 - Avoid third-party assertion libraries:
     ```csharp
     // Avoid: Using FluentAssertions or similar libraries
-    public class OrderTests
-    {
+    public class OrderTests {
         [Fact]
         public void CalculateTotal_WithValidLines_ReturnsCorrectSum()
         {
@@ -300,7 +276,7 @@ Tests should be reliable, maintainable, and provide meaningful coverage. Use xUn
                     new OrderLine("SKU1", 2, 10.0m),
                     new OrderLine("SKU2", 1, 20.0m)
                 });
-            
+
             // Avoid: Using FluentAssertions
             order.CalculateTotal().Should().Be(40.0m);
             order.Lines.Should().HaveCount(2);
@@ -308,76 +284,70 @@ Tests should be reliable, maintainable, and provide meaningful coverage. Use xUn
         }
     }
     ```
-    
+
 - Use proper assertion types:
     ```csharp
-    public class CustomerTests
-    {
+    public class CustomerTests {
         [Fact]
-        public void Customer_WithValidEmail_IsCreated()
-        {
+        public void Customer_WithValidEmail_IsCreated() {
             // Boolean assertions
             Assert.True(customer.IsActive);
             Assert.False(customer.IsDeleted);
-            
+
             // Equality assertions
             Assert.Equal("john@example.com", customer.Email);
             Assert.NotEqual(Guid.Empty, customer.Id);
-            
+
             // Collection assertions
             Assert.Empty(customer.Orders);
             Assert.Contains("Admin", customer.Roles);
             Assert.DoesNotContain("Guest", customer.Roles);
             Assert.All(customer.Orders, o => Assert.NotNull(o.Id));
-            
+
             // Type assertions
             Assert.IsType<PremiumCustomer>(customer);
             Assert.IsAssignableFrom<ICustomer>(customer);
-            
+
             // String assertions
             Assert.StartsWith("CUST", customer.Reference);
             Assert.Contains("Premium", customer.Description);
             Assert.Matches("^CUST\\d{6}$", customer.Reference);
-            
+
             // Range assertions
             Assert.InRange(customer.Age, 18, 100);
-            
+
             // Reference assertions
             Assert.Same(expectedCustomer, actualCustomer);
             Assert.NotSame(differentCustomer, actualCustomer);
         }
     }
     ```
-    
+
 - Use Assert.Collection for complex collections:
     ```csharp
     [Fact]
-    public void ProcessOrder_CreatesExpectedEvents()
-    {
+    public void ProcessOrder_CreatesExpectedEvents() {
         // Arrange
         var processor = new OrderProcessor();
         var order = CreateTestOrder();
-        
+
         // Act
         var events = processor.Process(order);
-        
+
         // Assert
         Assert.Collection(events,
-            evt =>
-            {
+            evt => {
                 Assert.IsType<OrderReceivedEvent>(evt);
                 var received = Assert.IsType<OrderReceivedEvent>(evt);
                 Assert.Equal(order.Id, received.OrderId);
             },
-            evt =>
-            {
+            evt => {
                 Assert.IsType<InventoryReservedEvent>(evt);
                 var reserved = Assert.IsType<InventoryReservedEvent>(evt);
                 Assert.Equal(order.Id, reserved.OrderId);
                 Assert.NotEmpty(reserved.ReservedItems);
             },
-            evt =>
-            {
+            evt => {
                 Assert.IsType<OrderConfirmedEvent>(evt);
                 var confirmed = Assert.IsType<OrderConfirmedEvent>(evt);
                 Assert.Equal(order.Id, confirmed.OrderId);

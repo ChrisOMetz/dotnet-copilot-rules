@@ -24,7 +24,7 @@ C# code should be written to maximize readability, maintainability, and correctn
     ```csharp
     // Good: Clear intent
     public async Task<Result<Order>> ProcessOrderAsync(OrderRequest request, CancellationToken cancellationToken)
-    
+
     // Avoid: Unclear abbreviations
     public async Task<Result<T>> ProcAsync<T>(ReqDto r, CancellationToken ct)
     ```
@@ -32,9 +32,8 @@ C# code should be written to maximize readability, maintainability, and correctn
     ```csharp
     // Good: Behavior separate from state
     public sealed record Order(OrderId Id, List<OrderLine> Lines);
-    
-    public static class OrderOperations
-    {
+
+    public static class OrderOperations {
         public static decimal CalculateTotal(Order order) =>
             order.Lines.Sum(line => line.Price * line.Quantity);
     }
@@ -46,10 +45,9 @@ C# code should be written to maximize readability, maintainability, and correctn
         IEnumerable<OrderLine> lines,
         decimal taxRate) =>
         lines.Sum(line => line.Price * line.Quantity) * (1 + taxRate);
-    
+
     // Avoid: Method with side effects
-    public void CalculateAndUpdateTotalPrice()
-    {
+    public void CalculateAndUpdateTotalPrice() {
         this.Total = this.Lines.Sum(l => l.Price * l.Quantity);
         this.UpdateDatabase();
     }
@@ -57,8 +55,7 @@ C# code should be written to maximize readability, maintainability, and correctn
 - Use extension methods appropriately:
     ```csharp
     // Good: Extension method for domain-specific operations
-    public static class OrderExtensions
-    {
+    public static class OrderExtensions {
         public static bool CanBeFulfilled(this Order order, Inventory inventory) =>
             order.Lines.All(line => inventory.HasStock(line.ProductId, line.Quantity));
     }
@@ -66,18 +63,16 @@ C# code should be written to maximize readability, maintainability, and correctn
 - Design for testability:
     ```csharp
     // Good: Easy to test pure functions
-    public static class PriceCalculator
-    {
+    public static class PriceCalculator {
         public static decimal CalculateDiscount(
             decimal price,
             int quantity,
             CustomerTier tier) =>
             // Pure calculation
     }
-    
+
     // Avoid: Hard to test due to hidden dependencies
-    public decimal CalculateDiscount()
-    {
+    public decimal CalculateDiscount() {
         var user = _userService.GetCurrentUser();  // Hidden dependency
         var settings = _configService.GetSettings(); // Hidden dependency
         // Calculation
@@ -89,11 +84,10 @@ C# code should be written to maximize readability, maintainability, and correctn
 - Minimize constructor injection:
     ```csharp
     // Good: Minimal dependencies
-    public sealed class OrderProcessor(IOrderRepository repository)
-    {
+    public sealed class OrderProcessor(IOrderRepository repository) {
         // Implementation
     }
-    
+
     // Avoid: Too many dependencies
     // Too many dependencies indicates possible design issues
     public class OrderProcessor(
@@ -101,15 +95,13 @@ C# code should be written to maximize readability, maintainability, and correctn
         ILogger logger,
         IEmailService emailService,
         IMetrics metrics,
-        IValidator validator)
-    {
+        IValidator validator) {
         // Implementation
     }
     ```
 - Prefer composition with interfaces:
     ```csharp
     // Good: Composition with interfaces
-    public sealed class EnhancedLogger(ILogger baseLogger, IMetrics metrics) : ILogger
-    {
+    public sealed class EnhancedLogger(ILogger baseLogger, IMetrics metrics) : ILogger {
     }
     ```
