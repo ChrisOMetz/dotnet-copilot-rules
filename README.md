@@ -34,6 +34,14 @@ Here is my top content extraction tools for GitHub Copilot:
 * `#context7` - fetch docs
 * `#codebase` - work with the code base
 
+### MCP Servers
+
+More at <https://www.mcpevals.io/blog/mcp-inspector-guide>
+
+```bash
+npx @modelcontextprotocol/inspector --config .vscode/.mcp.json --server microsoft.docs.mcp
+```
+
 ## How to Use This Repository
 
 Copy the relevant instructions you want to use into your project's `.vscode/instructions` directory and configure `github.copilot.chat.codeGeneration.instructions` if needed.
@@ -102,6 +110,10 @@ Document your coding guidelines so it can be consumed by AI tools. Not only can 
 ### Agent Mode
 
 With the introduction of [Agent Mode](https://code.visualstudio.com/blogs/2025/02/24/introducing-copilot-agent-mode), clear guidelines are crucial. They ensure consistency and independence in AI-generated contributions.
+
+## Code Formatting and Linting
+
+Although, coding guidelines could hint AI to generate code in a specific way, it is not a replacement for code formatting and linting tools. Further more, AI could disrupt your code formatting so make sure to use formatters and analyzers to keep your code clean and consistent.
 
 ## Changelog:
 
