@@ -42,6 +42,8 @@ More at <https://www.mcpevals.io/blog/mcp-inspector-guide>
 npx @modelcontextprotocol/inspector --config .vscode/.mcp.json --server microsoft.docs.mcp
 ```
 
+* https://code.visualstudio.com/mcp
+
 ## How to Use This Repository
 
 Copy the relevant instructions you want to use into your project's `.vscode/instructions` directory and configure `github.copilot.chat.codeGeneration.instructions` if needed.
