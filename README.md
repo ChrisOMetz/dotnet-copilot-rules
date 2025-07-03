@@ -9,6 +9,8 @@ A collection of [GitHub Copilot AI rules](https://code.visualstudio.com/docs/cop
 
 This set of rules is a good starting point and should be customized to fit your specific needs. You can add or remove rules as necessary.
 
+Additionally, you can check [Awesome Copilot Repo](https://github.com/github/awesome-copilot) for more inspiration.
+
 ### 💻 .NET Development
 
 Rules for writing clean, maintainable C# code:
