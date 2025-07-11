@@ -1,4 +1,12 @@
 {
+  "inputs": [
+    {
+      "id": "memory_file_path",
+      "type": "promptString",
+      "description": "Path to the memory storage file (optional)",
+      "password": false
+    }
+  ],
   "servers": {
     "github": {
       "type": "http",
@@ -15,6 +23,33 @@
     "microsoft.docs.mcp": {
       "type": "http",
       "url": "https://learn.microsoft.com/api/mcp"
+    },
+    "deepwiki": {
+      "type": "sse",
+      "url": "https://api.deepwiki.com/mcp/sse"
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": [
+        "@playwright/mcp@latest"
+      ]
+    },
+    "memory": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ],
+      "env": {
+        "MEMORY_FILE_PATH": "${input:memory_file_path}"
+      }
     }
   }
 }
